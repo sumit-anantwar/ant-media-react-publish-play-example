@@ -3,14 +3,15 @@ import './Player.css';
 import WebRTCAdaptor from './js/webrtc_adaptor';
 
 class Playernew extends React.Component {
-    webRTCAdaptor:?Object = null;
+    webRTCAdaptor: ?Object = null;
 
-    state:Object = {
+    state: Object = {
         mediaConstraints: {
             video: false,
             audio: false
         },
         streamName: 'stream1',
+        streamId: null,
         token: '',
         pc_config: {
             'iceServers': [{
@@ -21,31 +22,35 @@ class Playernew extends React.Component {
             OfferToReceiveAudio: true,
             OfferToReceiveVideo: true
         },
-        websocketURL: "wss://antmediaserver:5443//WebRTCAppEE/websocket",
-        isShow:false
+        websocketURL: "wss://connect.coderalabs.io:5443/VoxConnect/websocket",
+        isShow: false
     };
 
     constructor(props) {
         super(props);
     }
 
-    componentDidMount():void {
+    componentDidMount(): void {
+        let stream = this.props.match.params.streamId;
+        console.log(stream);
+
         this.webRTCAdaptor = this.initiateWebrtc();
         this.setState({
-            isShow:true
+            streamName: stream ?? "",
+            isShow: true
         });
     }
 
-    streamChangeHandler = ({target:{value}}:Event):void => {
+    streamChangeHandler = ({ target: { value } }: Event): void => {
         console.log(value);
-        this.setState({streamName: value});
+        this.setState({ streamName: value });
     }
 
-    onStartPlaying = (name:String):void => {
+    onStartPlaying = (name: String): void => {
         this.webRTCAdaptor.play(this.state.streamName, this.state.token);
     }
 
-    initiateWebrtc():WebRTCAdaptor {
+    initiateWebrtc(): WebRTCAdaptor {
         return new WebRTCAdaptor({
             websocket_url: this.state.websocketURL,
             mediaConstraints: this.state.mediaConstraints,
@@ -111,15 +116,17 @@ class Playernew extends React.Component {
     }
 
     render() {
-        const {streamName, isShow} = this.state;
+        const { streamName, streamId, isShow } = this.state;
 
         return (
             <>
                 <div className="Player">
                     YOU ARE IN PLAY PAGE <br />
                     <video id="remoteVideo" autoPlay controls playsInline></video>
-                    <br/>
-                    <input type="text" onChange={this.streamChangeHandler}/>
+                    <br />
+                    {
+                        <input type="text" value={streamName} onChange={this.streamChangeHandler} />
+                    }
                     {
                         isShow ? (
                             <button
@@ -132,7 +139,7 @@ class Playernew extends React.Component {
                     }
 
                 </div>
-                <div/>
+                <div />
             </>
 
         );

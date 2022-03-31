@@ -8,29 +8,30 @@ import Publishnew from "./Publishnew";
 import Playernewauto from "./Playernewauto";
 
 ReactDOM.render(
-  <React.StrictMode>
-      <Router>
-          <div>
-              <ul>
-                  <li>
-                      <Link to="/">Publish</Link>
-                  </li>
-                  <li>
-                      <Link to="/play">Play</Link>
-                  </li>
-                  <li>
-                      <Link to="/playauto">Play Auto</Link>
-                  </li>
-              </ul>
-              <Switch>
-                  <Route exact path="/" component={Publishnew} />
-                  <Route path="/play" component={Playernew} />
-                  <Route path="/playauto" component={Playernewauto} />
-              </Switch>
-          </div>
-      </Router>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <React.StrictMode>
+        <Router>
+            <div>
+                <ul>
+                    <li>
+                        <Link to="/">Publish</Link>
+                    </li>
+                    <li>
+                        <Link to="/play">Play</Link>
+                    </li>
+                    <li>
+                        <Link to="/playauto">Play Auto</Link>
+                    </li>
+                </ul>
+                <Switch>
+                    <Route path="/play/:streamId" component={Playernew} />
+                    <Route path="/play" component={Playernew} />
+                    <Route path="/playauto" component={Playernewauto} />
+                    <Route exact path="/" component={Publishnew} />
+                </Switch>
+            </div>
+        </Router>
+    </React.StrictMode>,
+    document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

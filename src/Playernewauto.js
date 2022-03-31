@@ -3,9 +3,9 @@ import './Player.css';
 import WebRTCAdaptor from './js/webrtc_adaptor';
 
 class Playernewauto extends React.Component {
-    webRTCAdaptor:?Object = null;
+    webRTCAdaptor: ?Object = null;
 
-    state:Object = {
+    state: Object = {
         mediaConstraints: {
             video: false,
             audio: false
@@ -21,31 +21,31 @@ class Playernewauto extends React.Component {
             OfferToReceiveAudio: true,
             OfferToReceiveVideo: true
         },
-        websocketURL: "wss://antmediaserver:5443/WebRTCAppEE/websocket",
-        isShow:false
+        websocketURL: "wss://connect.coderalabs.io:5443/VoxConnect/websocket",
+        isShow: false
     };
 
     constructor(props) {
         super(props);
     }
 
-    componentDidMount():void {
+    componentDidMount(): void {
         this.webRTCAdaptor = this.initiateWebrtc();
         this.setState({
-            isShow:true
+            isShow: true
         });
     }
 
-    streamChangeHandler = ({target:{value}}:Event):void => {
+    streamChangeHandler = ({ target: { value } }: Event): void => {
         console.log(value);
-        this.setState({streamName: value});
+        this.setState({ streamName: value });
     }
 
-    onStartPlaying = (name:String):void => {
+    onStartPlaying = (name: String): void => {
         this.webRTCAdaptor.play(this.state.streamName, this.state.token);
     }
 
-    initiateWebrtc():WebRTCAdaptor {
+    initiateWebrtc(): WebRTCAdaptor {
         let thiz = this;
         return new WebRTCAdaptor({
             websocket_url: this.state.websocketURL,
@@ -113,16 +113,16 @@ class Playernewauto extends React.Component {
     }
 
     render() {
-        const {streamName, isShow} = this.state;
+        const { streamName, isShow } = this.state;
 
         return (
             <>
                 <div className="Player">
                     YOU ARE IN AUTO PLAY PAGE <br />
                     <video id="remoteVideo" autoPlay controls playsInline></video>
-                    <br/>
+                    <br />
                 </div>
-                <div/>
+                <div />
             </>
 
         );
