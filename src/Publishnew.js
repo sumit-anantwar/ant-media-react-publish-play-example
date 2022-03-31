@@ -3,9 +3,9 @@ import './Player.css';
 import WebRTCAdaptor from './js/webrtc_adaptor';
 
 class Publishnew extends React.Component {
-    webRTCAdaptor:?Object = null;
+    webRTCAdaptor: ?Object = null;
 
-    state:Object = {
+    state: Object = {
         mediaConstraints: {
             video: true,
             audio: true
@@ -21,15 +21,15 @@ class Publishnew extends React.Component {
             OfferToReceiveAudio: false,
             OfferToReceiveVideo: false
         },
-        websocketURL: "ws://18.184.168.0:5080/VoxConnect/websocket",
-        isShow:false
+        websocketURL: "wss://connect.coderalabs.io:5443/VoxConnect/websocket",
+        isShow: false
     };
 
     constructor(props) {
         super(props);
     }
 
-    componentDidMount():void {
+    componentDidMount(): void {
         let videox = document.querySelector("#localVideo");
 
         if (navigator.mediaDevices.getUserMedia) {
@@ -43,20 +43,20 @@ class Publishnew extends React.Component {
         };
         this.webRTCAdaptor = this.initiateWebrtc();
         this.setState({
-            isShow:true
+            isShow: true
         });
     }
 
-    streamChangeHandler = ({target:{value}}:Event):void => {
+    streamChangeHandler = ({ target: { value } }: Event): void => {
         console.log(value);
-        this.setState({streamName: value});
+        this.setState({ streamName: value });
     }
 
-    onStartPublishing = (name:String):void => {
+    onStartPublishing = (name: String): void => {
         this.webRTCAdaptor.publish(this.state.streamName, this.state.token);
     }
 
-    initiateWebrtc():WebRTCAdaptor {
+    initiateWebrtc(): WebRTCAdaptor {
         let thiz = this;
         return new WebRTCAdaptor({
             websocket_url: this.state.websocketURL,
@@ -65,7 +65,7 @@ class Publishnew extends React.Component {
             sdp_constraints: this.state.sdpConstraints,
             localVideoId: "localVideo",
             debug: true,
-            bandwidth:900,
+            bandwidth: 900,
             callback: function (info, obj) {
                 if (info == "initialized") {
                     console.log("initialized");
@@ -75,14 +75,14 @@ class Publishnew extends React.Component {
                     console.log("publish started");
                     alert("publish started");
                     thiz.setState({
-                        isShow:false
+                        isShow: false
                     });
 
                 } else if (info == "publish_finished") {
                     //stream is being finished
                     console.log("publish finished");
                     thiz.setState({
-                        isShow:true
+                        isShow: true
                     });
 
                 } else if (info == "closed") {
@@ -128,15 +128,15 @@ class Publishnew extends React.Component {
     }
 
     render() {
-        const {streamName, isShow} = this.state;
+        const { streamName, isShow } = this.state;
 
         return (
             <>
                 <div className="Publish">
                     YOU ARE IN PUBLISH PAGE <br />
                     <video id="localVideo" autoPlay muted controls playsInline></video>
-                    <br/>
-                    <input type="text" onChange={this.streamChangeHandler}/>
+                    <br />
+                    <input type="text" onChange={this.streamChangeHandler} />
                     {
                         isShow ? (
                             <button
